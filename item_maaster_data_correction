@@ -1,0 +1,4 @@
+SELECT * FROM item_master WHERE NOT item_name REGEXP '^[A-Za-z0-9\.,@&\(\) \-]*$'
+
+
+261-268

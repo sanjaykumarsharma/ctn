@@ -1,0 +1,29 @@
+{
+  "name": "landscape_erp",
+  "version": "1.0.0",
+  "description": "22",
+  "main": "index.js",
+  "scripts": {
+    "babelify": "babel src/js --watch --out-file dist/js/bundle.js",
+    "compile": "riot --type babel src/tag dist/tag/tag.js",
+    "watch": "riot -w --type babel src/tag dist/tag/tag.js",
+    "make": "concurrently \"npm run babelify\" \"npm run compile\" \"npm run watch\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.11.4",
+    "babel-preset-es2015-riot": "^1.1.0",
+    "concurrently": "^3.5.1",
+    "moment": "^2.18.1",
+    "riot": "^2.6.7",
+    "riotcontrol": "0.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-plugin-external-helpers-2": "^6.3.13",
+    "parallelshell": "^2.0.0"
+  }
+}
