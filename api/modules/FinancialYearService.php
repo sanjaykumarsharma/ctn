@@ -510,14 +510,20 @@ public function dbRunningAmount() {
 
 public function dbOpeningStock() {//create opening stock for new financial
   try{
+
+        $prev_financial_year_id=2;
+        $new_financial_year_id=3;
+
         $objPDO = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USER, DB_PASS);
         $objPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $objPDO->beginTransaction();
          
         $item_ids= array();
         $query1 = 'select distinct a.item_id, item_name, a.stock_type_code, uom_code
                    from item_master a
                    join transaction b on a.item_id=b.item_id
-                   where b.financial_year_id = 1';
+                   where b.financial_year_id ='.$prev_financial_year_id;
                    //and b.item_id=14741
 
         $statement1 = $objPDO->prepare($query1);
@@ -536,7 +542,7 @@ public function dbOpeningStock() {//create opening stock for new financial
                               uom_code, b.location, stock_type_code, 'Opening' as details
                               from transaction a
                               join item_master b on a.item_id = b.item_id
-                              where a.financial_year_id = 1
+                              where a.financial_year_id = 2
                               and a.item_id = :item_id
                               and transaction_type = 'O'
 
@@ -549,7 +555,7 @@ public function dbOpeningStock() {//create opening stock for new financial
                               from transaction a
                               join item_master b on a.item_id = b.item_id
                               join docket c on (a.docket_id = c.docket_id and a.financial_year_id = c.financial_year_id)
-                              where a.financial_year_id = 1
+                              where a.financial_year_id = 2
                               and a.item_id = :item_id
                               and transaction_type = 'R'
 
@@ -562,7 +568,7 @@ public function dbOpeningStock() {//create opening stock for new financial
                               from transaction a
                               join item_master b on a.item_id = b.item_id
                               join issue_to_department c on (a.issue_id = c.issue_id and a.financial_year_id = c.financial_year_id)
-                              where a.financial_year_id = 1
+                              where a.financial_year_id = 2
                               and a.item_id = :item_id
                               and transaction_type = 'I'
 
@@ -575,7 +581,7 @@ public function dbOpeningStock() {//create opening stock for new financial
                               from transaction a
                               join item_master b on a.item_id = b.item_id
                               join reject_to_party c on (a.reject_to_party_id = c.reject_to_party_id and a.financial_year_id = c.financial_year_id)
-                              where a.financial_year_id = 1
+                              where a.financial_year_id = 2
                               and a.item_id = :item_id
                               and transaction_type = 'RP'
 
@@ -588,7 +594,7 @@ public function dbOpeningStock() {//create opening stock for new financial
                               from transaction a
                               join item_master b on a.item_id = b.item_id
                               join return_to_stock c on (a.return_to_stock_id = c.return_to_stock_id and a.financial_year_id = c.financial_year_id)
-                              where a.financial_year_id = 1
+                              where a.financial_year_id = 2
                               and a.item_id = :item_id
                               and transaction_type = 'RS'
                               
@@ -625,8 +631,8 @@ public function dbOpeningStock() {//create opening stock for new financial
                       values(:financial_year_id, :item_id, :qty, :running_balance, :running_amount, :rate,
                         :transaction_date, :transaction_type)";
              $statement6 = $objPDO->prepare($query6); 
-             $financial_year_id=2;
-             $statement6->bindParam(':financial_year_id', $financial_year_id);
+             //$financial_year_id=2;
+             $statement6->bindParam(':financial_year_id', $new_financial_year_id);
              $statement6->bindParam(':item_id', $v1['item_id']);
              $statement6->bindParam(':qty', $v1['running_balance']);
              $statement6->bindParam(':running_balance', $v1['running_balance']);
@@ -650,9 +656,11 @@ public function dbOpeningStock() {//create opening stock for new financial
              $statement7 = $objPDO->prepare($query7); 
              $statement7->bindParam(':item_id', $v1['item_id']);
              $statement7->bindParam(':qty', $v1['running_balance']);
-             $financial_year_id=2;
-             $statement7->bindParam(':financial_year_id', $financial_year_id);
+             //$financial_year_id=2;
+             $statement7->bindParam(':financial_year_id', $new_financial_year_id);
              $statement7->execute(); 
+
+             //test stock_in_hand difference
 
              /*SELECT a.item_id, a.qty, b.qty, running_balance, running_amount, rate FROM `transaction` a
 join stock_in_hand b on (a.item_id=b.item_id and a.financial_year_id = b.financial_year_id)
@@ -660,12 +668,29 @@ join stock_in_hand b on (a.item_id=b.item_id and a.financial_year_id = b.financi
 order by 1*/
            }
          }
+
+         //item_master data stock_in_hand 0 entry
+
+         /*insert into stock_in_hand (item_id,qty,financial_year_id)
+select item_id, '0' as qty, '3' as financial_year_id  from item_master where item_id not in (SELECT item_id FROM stock_in_hand WHERE financial_year_id=3)*/
+
+         $query8="insert into stock_in_hand (item_id,qty,financial_year_id)
+                                      select item_id, '0' as qty, '3' as financial_year_id  
+                                      from item_master 
+                                      where item_id not in (SELECT item_id FROM stock_in_hand WHERE financial_year_id=3)";
+
+         $statement8 = $objPDO->prepare($query8); 
+         $statement8->execute(); 
+
+        $objPDO->commit();
          // return;
          $r1data = array();
          $r1data['status'] = "s";
          $r1data['items'] = $report_data;
          return $r1data;
       }catch(Shuttle_Exception $e) {
+        $objPDO->rollback(); 
+         $objPDO = null;
       $error['status'] = "e";
       $error['error'] = $e->getMessage();
       return $error;

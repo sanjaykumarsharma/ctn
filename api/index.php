@@ -1078,6 +1078,7 @@ function checkLoginStatusFromSession(){
        exit (0);
     }
 }
+
 /*make item_id + financial_year_id as primary key*/
 /*insert into stock_in_hand (item_id,qty,financial_year_id) select item_id,qty,'2' from stock_in_hand where financial_year_id=1*/
 /*insert into transaction (financial_year_id, item_id, qty, running_balance, transaction_date, transaction_type) 
@@ -1085,7 +1086,9 @@ function checkLoginStatusFromSession(){
 /*make docket_no + stock_type_code + financial_year_id as primary key*/
 
 /*insert into stock_in_hand (item_id,qty,financial_year_id)
-select item_id, '0' as qty, '2' as financial_year_id  from item_master where item_id not in (SELECT item_id FROM stock_in_hand WHERE financial_year_id=2)*/
+select item_id, '0' as qty, '3' as financial_year_id  from item_master where item_id not in (SELECT item_id FROM stock_in_hand WHERE financial_year_id=3)*/
+
+/*SELECT * FROM `stock_in_hand` WHERE item_id not in(select item_id from stock_in_hand where financial_year_id=3) and financial_year_id=2 and qty!=0*/
 
 /*
 query to check indent status
