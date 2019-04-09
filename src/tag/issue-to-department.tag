@@ -532,6 +532,7 @@
 
 
     self.saveIssueToDepartment = () => {
+
       if(self.issueDateInput.value==''){
          toastr.info("Please Entet Issue Date")
         return
@@ -568,6 +569,8 @@
 
       let error='';
       let count=1;
+
+      
       self.selectedMaterialsArray.map(i=>{
           let chargeHeadInput= '#chargeHeadInput'+i.item_id
           i.chargehead_id=$(chargeHeadInput).val()
@@ -577,6 +580,10 @@
 
           let remarksInput= '#remarksInput'+i.item_id
           i.remarks=$(remarksInput).val() 
+
+          if(Number(i.qty)>Number(i.stock)){
+            error=error + 'issue qty can not be greater than stock in hand '+count+',';
+          }
 
           //validation check
           //if(self.adjustmentInput.value=='N'){

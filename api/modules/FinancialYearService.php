@@ -281,7 +281,7 @@ public function dbStore() {
     }
 }
 
-public function dbRunningAmount() {
+public function dbRunningAmount1() {
   try{
         $objPDO = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USER, DB_PASS);
         $objPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -508,7 +508,7 @@ public function dbRunningAmount() {
 }
 
 
-public function dbOpeningStock() {//create opening stock for new financial
+public function dbOpeningStock1() {//create opening stock for new financial
   try{
 
         $prev_financial_year_id=2;
@@ -624,7 +624,7 @@ public function dbOpeningStock() {//create opening stock for new financial
            $counter=0;
            foreach ($val['items'] as $key1 => $v1) {
                /*insert into transaction (financial_year_id, item_id, qty, running_balance, transaction_date, transaction_type) 
- select '2', item_id, qty, qty, '2018-04-01', 'O' from stock_in_hand where financial_year_id=1 and item_id in(select item_id from item_master)*/
+ select '2', item_id, qty, qty, '2019-04-01', 'O' from stock_in_hand where financial_year_id=1 and item_id in(select item_id from item_master)*/
 
              $query6="Insert into transaction(financial_year_id, item_id, qty, running_balance,
                                               running_amount, rate, transaction_date, transaction_type) 
@@ -643,7 +643,7 @@ public function dbOpeningStock() {//create opening stock for new financial
              }
              
              $statement6->bindParam(':rate', $rate);
-             $transaction_date='2018-04-01';
+             $transaction_date='2019-04-01';
              $statement6->bindParam(':transaction_date', $transaction_date);
              $transaction_type='O';
              $statement6->bindParam(':transaction_type', $transaction_type);
@@ -664,15 +664,12 @@ public function dbOpeningStock() {//create opening stock for new financial
 
              /*SELECT a.item_id, a.qty, b.qty, running_balance, running_amount, rate FROM `transaction` a
 join stock_in_hand b on (a.item_id=b.item_id and a.financial_year_id = b.financial_year_id)
- WHERE a.financial_year_id=2  and a.qty!=b.qty
+ WHERE a.financial_year_id=3  and a.qty!=b.qty
 order by 1*/
            }
          }
 
          //item_master data stock_in_hand 0 entry
-
-         /*insert into stock_in_hand (item_id,qty,financial_year_id)
-select item_id, '0' as qty, '3' as financial_year_id  from item_master where item_id not in (SELECT item_id FROM stock_in_hand WHERE financial_year_id=3)*/
 
          $query8="insert into stock_in_hand (item_id,qty,financial_year_id)
                                       select item_id, '0' as qty, '3' as financial_year_id  

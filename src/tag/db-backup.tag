@@ -17,8 +17,8 @@
        <br>
        <br>
        <br>
-       <button class="btn btn-primary" disabled={loading} onclick={dbStore} style="display:none">Item,Party Master utf8-encoding</button>
-       <button class="btn btn-primary" disabled={loading} onclick={dbRunningAmount} style="display:none">Running Amount</button>
+       <!-- <button class="btn btn-primary" disabled={loading} onclick={dbStore} style="display:none">Item,Party Master utf8-encoding</button>
+       <button class="btn btn-primary" disabled={loading} onclick={dbRunningAmount} style="display:none">Running Amount</button> -->
        <button class="btn btn-primary" disabled={loading} onclick={dbOpeningStock} style="display:none">Opening Stock For New Financial Year</button>
     </div>
   </div>

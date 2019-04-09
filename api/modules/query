@@ -1,0 +1,7 @@
+select transaction_id, item_id, qty, running_balance, running_amount, rate from transaction where financial_year_id=3 and transaction_type='O' and qty<0
+
+update transaction set qty=0, running_balance=0, running_amount=0, rate=0 where financial_year_id=3 and transaction_type='O' and qty<0
+
+select item_id, qty from stock_in_hand where financial_year_id=3 and qty<0
+
+update stock_in_hand set qty=0 where financial_year_id=3 and qty<0

@@ -300,11 +300,12 @@
             <img src="dist/img/ntc.png" style="width:250px;padding-bottom:10px">
           </center>
           <!-- <p style="padding-left:65px"> -->
+            <!-- Phone: (033) 3019-0506/0509<br> -->
           <p>
             149,Barrackpore Trunk Road<br>
             P.O. : Kamarhati, Agarpara<br>
             Kolkata - 700058<br>
-            Phone: (033) 3019-0506/0509<br>
+            Phone: (+91) 7595046806/09<br>
             Fax: (033) 3019-0520<br>
             Email: purchase@ntcind.com<br>
             Email: stores_ntc@rdbindia.com<br>
